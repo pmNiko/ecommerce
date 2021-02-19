@@ -5,10 +5,30 @@ import * as Yup from "yup";
 import { toats } from "react-toastify";
 
 export default function LoginForm({ showRegisterForm }) {
+  const formik = useFormik({
+    initialValues: initialValues(),
+    validationSchema: Yup.object(validationSchema()),
+    onSubmit: (formData) => {
+      console.log(formData);
+    },
+  });
+
   return (
-    <Form className="login-form">
-      <Form.Input name="identifier" type="text" placeholder="Email" />
-      <Form.Input name="password" type="password" placeholder="password" />
+    <Form className="login-form" onSubmit={formik.handleSubmit}>
+      <Form.Input
+        name="identifier"
+        type="text"
+        placeholder="Email"
+        onChange={formik.handleChange}
+        error={formik.errors.identifier}
+      />
+      <Form.Input
+        name="password"
+        type="password"
+        placeholder="password"
+        onChange={formik.handleChange}
+        error={formik.errors.password}
+      />
       <div className="actions">
         <Button type="button" basic onClick={showRegisterForm}>
           Registrarse
@@ -22,4 +42,20 @@ export default function LoginForm({ showRegisterForm }) {
       </div>
     </Form>
   );
+}
+
+// Función para inicializar valores
+function initialValues() {
+  return {
+    identifier: "",
+    password: "",
+  };
+}
+
+// Función para validar el schema de datos
+function validationSchema() {
+  return {
+    identifier: Yup.string().email(true).required(true),
+    password: Yup.string().required(true),
+  };
 }
