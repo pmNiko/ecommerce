@@ -8,21 +8,25 @@ import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function MyApp({ Component, pageProps }) {
+  // state para guardar los datos del user
   const [auth, setAuth] = useState(undefined);
-  console.log(auth);
 
+  // función login para tener de manera transversal a la app
+  // los datos y token del user
   const login = (token) => {
+    // guarda el token en el localStorage
     setToken(token);
     setAuth({
       token,
-      idUser: jwtDecode(token).id,
+      idUser: jwtDecode(token).id, //decodificación del jwt
     });
   };
 
+  // constante para guardar mediante el hook las fn de authenticación
   const authData = useMemo(
     () => ({
-      auth: { name: "Nicolas", email: "nikolas@gmail.com" },
-      login,
+      auth, //datos del state auth
+      login, //fn login
       logout: () => null,
       setReloadUser: () => null,
     }),
@@ -30,6 +34,7 @@ export default function MyApp({ Component, pageProps }) {
   );
 
   return (
+    // Pasa al Provider los datos en memoria authData
     <AuthContext.Provider value={authData}>
       <Component {...pageProps} />
       <ToastContainer

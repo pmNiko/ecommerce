@@ -1,5 +1,6 @@
 import { createContext } from "react";
 
+// defininicon del contexto
 const AuthContext = createContext({
   auth: undefined, //datos del usuario
   login: () => null, //token en el localStorage
