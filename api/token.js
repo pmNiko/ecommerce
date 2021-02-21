@@ -9,3 +9,8 @@ export function setToken(token) {
 export function getToken() {
   return localStorage.getItem(TOKEN);
 }
+
+// fn para borrar el token del localStorage
+export function removeToken() {
+  return localStorage.removeItem(TOKEN);
+}

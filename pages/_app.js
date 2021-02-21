@@ -1,16 +1,19 @@
 import React, { useMemo, useState, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import jwtDecode from "jwt-decode";
-import { setToken, getToken } from "../api/token";
+import { setToken, getToken, removeToken } from "../api/token";
+import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import "../scss/global.scss";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import { TOKEN } from "../utils/constants";
 
 export default function MyApp({ Component, pageProps }) {
   // state para guardar los datos del user
   const [auth, setAuth] = useState(undefined);
   const [reloadUser, setReloadUser] = useState(false);
+  const router = useRouter();
 
   // se recargaran los datos del usuario mediante el state
   useEffect(() => {
@@ -35,12 +38,21 @@ export default function MyApp({ Component, pageProps }) {
     });
   };
 
+  // fn para desloguear un usuario
+  const logout = () => {
+    if (auth) {
+      removeToken();
+      setAuth(null);
+      router.push("/");
+    }
+  };
+
   // constante para guardar mediante el hook las fn de authenticación
   const authData = useMemo(
     () => ({
       auth, //datos del state auth
       login, //fn login
-      logout: () => null,
+      logout, //fn logout
       setReloadUser,
     }),
     [auth] //se actualizara cuando cambie el state
