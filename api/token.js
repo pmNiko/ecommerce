@@ -4,3 +4,8 @@ import { TOKEN } from "../utils/constants";
 export function setToken(token) {
   localStorage.setItem(TOKEN, token);
 }
+
+// fn para recuperar el token del localStorage
+export function getToken() {
+  return localStorage.getItem(TOKEN);
+}

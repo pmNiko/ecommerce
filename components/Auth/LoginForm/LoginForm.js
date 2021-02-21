@@ -8,7 +8,8 @@ import { loginApi } from "../../../api/user";
 
 export default function LoginForm({ showRegisterForm, onCloseModal }) {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, auth } = useAuth();
+  console.log(auth);
 
   const formik = useFormik({
     initialValues: initialValues(),
