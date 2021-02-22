@@ -31,17 +31,18 @@ export default function Account() {
 
   return (
     <BasicLayout className="account">
-      <Configuration user={user} />
+      <Configuration user={user} logout={logout} />
     </BasicLayout>
   );
 }
 
-function Configuration({ user }) {
+// Componente del formulario de datos del user
+function Configuration({ user, logout }) {
   return (
     <div className="account__configuration">
       <div className="title">Configuración</div>
       <div className="data">
-        <ChangeNameForm {...user} />
+        <ChangeNameForm user={user} logout={logout} />
       </div>
     </div>
   );
