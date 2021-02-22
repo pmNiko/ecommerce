@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { updateNameApi } from "../../../api/user";
 
-export default function ChangeNameForm({ user, logout }) {
+export default function ChangeNameForm({ user, logout, setReloadUser }) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
@@ -18,6 +18,7 @@ export default function ChangeNameForm({ user, logout }) {
         //si response no existe entonces lanzamos un error
         toast.error("Error al actualizar datos!");
       } else {
+        setReloadUser(true); //state pasado por params que recupera y actualiza los datos del user en el menu
         toast.success("Datos actualizados correctamente!");
       }
       setLoading(false);

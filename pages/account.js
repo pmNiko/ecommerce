@@ -8,7 +8,7 @@ import ChangeNameForm from "../components/Account/ChangeNameForm";
 // Pagina de perfil de user
 export default function Account() {
   const [user, setUser] = useState(undefined);
-  const { auth, logout } = useAuth(); //recuperamos las fn del context
+  const { auth, logout, setReloadUser } = useAuth(); //recuperamos las fn del context
   const router = useRouter();
 
   // pondra en null el state user si el token expira
@@ -31,18 +31,26 @@ export default function Account() {
 
   return (
     <BasicLayout className="account">
-      <Configuration user={user} logout={logout} />
+      <Configuration
+        user={user}
+        logout={logout}
+        setReloadUser={setReloadUser}
+      />
     </BasicLayout>
   );
 }
 
 // Componente del formulario de datos del user
-function Configuration({ user, logout }) {
+function Configuration({ user, logout, setReloadUser }) {
   return (
     <div className="account__configuration">
       <div className="title">Configuración</div>
       <div className="data">
-        <ChangeNameForm user={user} logout={logout} />
+        <ChangeNameForm
+          user={user}
+          logout={logout}
+          setReloadUser={setReloadUser}
+        />
       </div>
     </div>
   );
