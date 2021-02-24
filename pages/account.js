@@ -4,6 +4,7 @@ import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth";
 import { getMeApi } from "../api/user";
 import ChangeNameForm from "../components/Account/ChangeNameForm";
+import ChangeEmailForm from "../components/Account/ChangeEmailForm";
 
 // Pagina de perfil de user
 export default function Account() {
@@ -47,6 +48,11 @@ function Configuration({ user, logout, setReloadUser }) {
       <div className="title">Configuración</div>
       <div className="data">
         <ChangeNameForm
+          user={user}
+          logout={logout}
+          setReloadUser={setReloadUser}
+        />
+        <ChangeEmailForm
           user={user}
           logout={logout}
           setReloadUser={setReloadUser}

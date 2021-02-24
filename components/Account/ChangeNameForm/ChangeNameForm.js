@@ -53,6 +53,7 @@ export default function ChangeNameForm({ user, logout, setReloadUser }) {
   );
 }
 
+// Función para inicializar values del form
 function initialValues(name, lastname) {
   return {
     name: name || "",
@@ -60,6 +61,7 @@ function initialValues(name, lastname) {
   };
 }
 
+// función para validar los datos del schema
 function validationSchema() {
   return {
     name: Yup.string().required(true),
