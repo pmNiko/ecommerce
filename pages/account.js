@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 import { getMeApi } from "../api/user";
 import ChangeNameForm from "../components/Account/ChangeNameForm";
 import ChangeEmailForm from "../components/Account/ChangeEmailForm";
+import ChangePasswordForm from "../components/Account/ChangePasswordForm";
 
 // Pagina de perfil de user
 export default function Account() {
@@ -57,6 +58,7 @@ function Configuration({ user, logout, setReloadUser }) {
           logout={logout}
           setReloadUser={setReloadUser}
         />
+        <ChangePasswordForm user={user} logout={logout} />
       </div>
     </div>
   );
