@@ -71,26 +71,43 @@ function Configuration({ user, logout, setReloadUser }) {
 
 // componente de direcciones
 function Addresses() {
-  const [showModal, setShowModal] = useState(false);
-  const [titleModal, setTitleModal] = useState("");
-  const [formModal, setFormModal] = useState(null);
+  const [showModal, setShowModal] = useState(false); //activa el modal
+  const [titleModal, setTitleModal] = useState(""); //setea el titulo del modal
+  const [formModal, setFormModal] = useState(null); //contiene los datos del form
+  const [reloadAddress, setReloadAddress] = useState(false); //actualiza las direcciones en el dom
 
-  const openModal = (title) => {
+  // fn para abrir el modal
+  const openModal = (title, address) => {
     setTitleModal(title);
-    setFormModal(<AddressForm setShowModal={setShowModal} />);
+    setFormModal(
+      <AddressForm
+        setShowModal={setShowModal}
+        setReloadAddress={setReloadAddress}
+        newAddress={address ? false : true} //Si el param address existe
+        address={address || null} //envio de la direccion si existe
+      />
+    );
     setShowModal(true);
   };
 
   return (
     <div className="account__addresses">
+      {/* titulo de la sección */}
       <div className="title">
         Direcciones
+        {/* boton para cargar nuevas direcciones */}
         <Icon name="plus" link onClick={() => openModal("Nueva Dirección")} />
       </div>
+      {/* render de las direcciones ya cargadas */}
       <div className="data">
-        <ListAddress />
+        <ListAddress
+          setReloadAddress={setReloadAddress}
+          reloadAddress={reloadAddress}
+          openModal={openModal}
+        />
       </div>
 
+      {/* modal precargado */}
       <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
         {formModal}
       </BasicModal>

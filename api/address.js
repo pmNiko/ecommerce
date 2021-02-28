@@ -32,3 +32,38 @@ export async function getAddressApi(idUser, logout) {
     return null;
   }
 }
+
+// fn para eliminar una dirección de un user
+export async function deleteAddressApi(idAddress, logout) {
+  try {
+    const url = `${BASE_PATH}/addresses/${idAddress}`;
+    const params = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const result = await authFetch(url, params, logout);
+    if (result.statusCode === 500) throw "Error del server";
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+// fn para actualizar la dirección del user
+export async function updateAddressApi(idAddress, address, logout) {
+  try {
+    const url = `${BASE_PATH}/addresses/${idAddress}`;
+    const params = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(address),
+    };
+    const result = await authFetch(url, params, logout);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

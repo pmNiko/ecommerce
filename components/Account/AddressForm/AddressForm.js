@@ -3,21 +3,28 @@ import { Button, Form } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuth from "../../../hooks/useAuth";
-import { createAddressApi } from "../../../api/address";
+import { createAddressApi, updateAddressApi } from "../../../api/address";
 import { toast } from "react-toastify";
 
-export default function AddressForm({ setShowModal }) {
+export default function AddressForm({
+  setShowModal,
+  setReloadAddress,
+  newAddress,
+  address,
+}) {
   const [loading, setLoading] = useState(false);
-  const { auth, logout } = useAuth();
+  const { auth, logout } = useAuth(); //fn context
 
+  // formik para creación y edición de direcciones
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: initialValues(address),
     validationSchema: Yup.object(validationSchema()),
     onSubmit: (formData) => {
-      createAddress(formData);
+      newAddress ? createAddress(formData) : updateAddress(formData);
     },
   });
 
+  // fn para crear una dirección
   const createAddress = async (formData) => {
     setLoading(true);
     const formDataTemp = {
@@ -26,14 +33,35 @@ export default function AddressForm({ setShowModal }) {
     };
     const response = await createAddressApi(formDataTemp, logout);
     if (!response) {
-      toast.error("Se produjo un error al cargar su nueva dirección.");
+      toast.warning("Se produjo un error al cargar su nueva dirección.");
       setLoading(false);
     } else {
       formik.resetForm(); //limpia el formulario
+      setReloadAddress(true);
       setShowModal(false);
       toast.success("La dirección fue cargada!");
       setLoading(false);
     }
+  };
+
+  // fn para editar la dirección de un usuario
+  const updateAddress = async (formData) => {
+    setLoading(true);
+    const formDataTemp = {
+      ...formData, //spread para recuperar el array de valores
+      users_permissions_user: auth.idUser, //necesitamos pasarle la ref al user
+    };
+    const response = await updateAddressApi(address._id, formDataTemp, logout);
+    if (!response) {
+      toast.warning("Se produjo un error al actualizar la dirección.");
+      setLoading(false);
+    } else {
+      formik.resetForm(); //limpia el formulario
+      setReloadAddress(true);
+      setShowModal(false);
+      toast.success("La dirección fue actualizada!");
+    }
+    setLoading(false);
   };
 
   return (
@@ -117,23 +145,23 @@ export default function AddressForm({ setShowModal }) {
 
       <div className="actions">
         <Button className="submit" type="submit" loading={loading}>
-          Crear dirección
+          {newAddress ? "Cargar" : "Actualizar"}
         </Button>
       </div>
     </Form>
   );
 }
 
-// inicialización de values
-function initialValues() {
+// inicialización de values. Al editar una dirección "address" asignara el valor
+function initialValues(address) {
   return {
-    title: "",
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    phone: "",
+    title: address?.title || "",
+    name: address?.name || "",
+    address: address?.address || "",
+    city: address?.city || "",
+    state: address?.state || "",
+    postalCode: address?.postalCode || "",
+    phone: address?.phone || "",
   };
 }
 
