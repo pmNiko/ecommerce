@@ -2,14 +2,38 @@ import { map } from "lodash";
 import React from "react";
 import { Image, Grid } from "semantic-ui-react";
 import Link from "next/link";
+import useWindowSize from "../../hooks/useWindowSize";
+import {
+  breackpointUpSm,
+  breackpointUpMd,
+  breackpointUpLg,
+} from "../../utils/brackpoint";
 
 export default function ListGames({ games }) {
+  //custom hook para capturar el tamaño de la pantalla
+  const { width } = useWindowSize();
+
+  // fn para devolver la cantidad de columns segun el tamaño
+  const getColumnsRender = () => {
+    switch (true) {
+      case width > breackpointUpLg: //desktop
+        return 5;
+      case width > breackpointUpMd: //tablet
+        return 3;
+      case width > breackpointUpSm: //mobil
+        return 2;
+      default:
+        //mobil
+        return 1;
+    }
+  };
+
   return (
     <div className="list-games">
       <Grid>
-        <Grid.Row columns={5}>
+        <Grid.Row columns={getColumnsRender()}>
           {map(games, (game) => (
-            <Game game={game} />
+            <Game game={game} key={game._id} />
           ))}
         </Grid.Row>
       </Grid>

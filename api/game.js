@@ -14,3 +14,22 @@ export async function getLastGamesApi(limit) {
     return null;
   }
 }
+
+// fn para recibir los juegos segun la plataforma
+/*  Los parametros que recibira seran: la plataforma 
+    el limit(cantidad de juegos por pagina)
+    start(a partir de que indice, para paginar los juegos)*/
+export async function getGamesPlatformApi(platform, limit, start) {
+  try {
+    const limitItems = `_limit=${limit}`; //cantidad de juegos
+    const sortItems = `_sort=createdAt:desc`; //orden descendente por creación
+    const startItems = `_start=${start}`; //indice de paginación
+    const url = `${BASE_PATH}/games?platform.url=${platform}&${limitItems}&${sortItems}&${startItems}`;
+    const response = await fetch(url);
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
