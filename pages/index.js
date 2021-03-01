@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { size } from "lodash";
+import { Loader } from "semantic-ui-react";
+import { size, map } from "lodash";
 import BasicLayout from "../layouts/BasicLayout";
 import { getLastGamesApi } from "../api/game";
+import ListGames from "../components/ListGames";
 
 export default function Home() {
   const [games, setGames] = useState(null); //state de juegos
 
-  console.log(games);
   // petición a la API para recuperar los juegos
   useEffect(() => {
     (async () => {
@@ -18,8 +19,17 @@ export default function Home() {
   }, []);
 
   return (
-    <BasicLayout>
-      <h1>Estamos en Next Js</h1>
+    <BasicLayout className="home">
+      {/* spinner activo mientras se realiza la petición */}
+      {!games && <Loader active>Cargando juegos</Loader>}
+      {/* Si al teminar la petición no existen juegos  */}
+      {games && size(games) === 0 && (
+        <div>
+          <h3>No hay juegos</h3>
+        </div>
+      )}
+      {/* Renderización de los juegos existentes */}
+      {size(games) > 0 && <ListGames games={games} />}
     </BasicLayout>
   );
 }
