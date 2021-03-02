@@ -1,0 +1,5 @@
+Para gestionar la paginación de la lista de juegos debemos
+tener en contexto:
+  -> La lista de juegos 
+  -> La cantidad de juegos de esa categoria 
+  -> La pagina en la que estamos para poder ir avanzando o retrocediendo

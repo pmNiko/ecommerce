@@ -1,3 +1,4 @@
+import { rest } from "lodash";
 import { BASE_PATH } from "../utils/constants";
 
 // fn para recuperar el listado de juegos
@@ -26,7 +27,20 @@ export async function getGamesPlatformApi(platform, limit, start) {
     const startItems = `_start=${start}`; //indice de paginación
     const url = `${BASE_PATH}/games?platform.url=${platform}&${limitItems}&${sortItems}&${startItems}`;
     const response = await fetch(url);
-    const result = response.json();
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// fn para recuperar el numero total de juegos por plataforma
+export async function getTotalGamesPlatformApi(platform) {
+  try {
+    const url = `${BASE_PATH}/games/count?platform.url=${platform}`;
+    const response = await fetch(url);
+    const result = await response.json();
     return result;
   } catch (error) {
     console.log(error);
