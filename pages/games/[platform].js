@@ -16,7 +16,7 @@ export default function Platform() {
   const [games, setGames] = useState(null); //state de juegos
   const [totalGames, setTotalGames] = useState(null); //cantidad de juegos
 
-  // fn para la paginación
+  // fn devuelve el la prop start para la paginación
   const getStartItems = () => {
     const currentPages = parseInt(query.page);
     // si query.page no existe o currentPages es 1 inicia por el item 0
@@ -30,9 +30,9 @@ export default function Platform() {
     (async () => {
       if (query.platform) {
         const response = await getGamesPlatformApi(
-          query.platform,
-          limitPerPage,
-          getStartItems()
+          query.platform, //indica de que plataforma devolver los juegos
+          limitPerPage, //indica el limite de juegos por pagina
+          getStartItems() //indica a partir de que juego paginar
         );
         setGames(response);
       }
