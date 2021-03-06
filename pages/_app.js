@@ -7,7 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "../scss/global.scss";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import { TOKEN } from "../utils/constants";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function MyApp({ Component, pageProps }) {
   // state para guardar los datos del user
