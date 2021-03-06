@@ -23,12 +23,14 @@
 
       &:focus{
         overflow: none !important;
+        outline: none !important;
       }
 
       &:active{
         background-color: $background-grey;
         color: $font-light;
       }
+
     }
   }
 }

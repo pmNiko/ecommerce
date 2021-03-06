@@ -8,7 +8,7 @@ import ListGames from "../../components/ListGames";
 import Pagination from "../../components/Pagination";
 
 // limite por pagina
-const limitPerPage = 3;
+const limitPerPage = 5;
 
 export default function Platform() {
   const { query } = useRouter(); //de router resupero query
