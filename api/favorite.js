@@ -59,3 +59,14 @@ export async function deleteFavoriteApi(idUser, idGame, logout) {
     return null;
   }
 }
+
+// fn para recuperar todos los favoritos de un usuario
+export async function getFavoriteApi(idUser, logout) {
+  try {
+    const url = `${BASE_PATH}/favorites?users_permissions_user=${idUser}`;
+    return await authFetch(url, null, logout);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
