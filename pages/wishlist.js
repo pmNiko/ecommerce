@@ -36,7 +36,7 @@ export default function wishlist() {
           {!games && <Loader active>Cargando juegos</Loader>}
           {games && size(games) === 0 && (
             <div className="data__not-found">
-              <h3>No tienes ningun juegos agregados</h3>
+              <h3>No tienes ningun juego agregado...</h3>
             </div>
           )}
           {size(games) > 0 && <ListGames games={games} />}
