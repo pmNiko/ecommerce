@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import { size } from "lodash";
 import classNames from "classnames";
 import { Grid, Image, Icon, Button } from "semantic-ui-react";
-import { isFavoriteApi, addFavoriteApi } from "../../../api/favorite";
+import {
+  isFavoriteApi,
+  addFavoriteApi,
+  deleteFavoriteApi,
+} from "../../../api/favorite";
 import useAuth from "../../../hooks/useAuth";
 
+// render del componente header del game
 export default function HeaderGame({ game }) {
   const { poster, title } = game;
 
@@ -20,13 +25,15 @@ export default function HeaderGame({ game }) {
   );
 }
 
+// render de la info del juego
 function Info({ game }) {
   const { title, summary, price, discount } = game;
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [reloadFavorite, setReloadFavorite] = useState(false);
-  const [loadingFavorite, setloadingFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false); //validación de juego favorito
+  const [reloadFavorite, setReloadFavorite] = useState(false); //lanza la recarga mediante useEffect
+  const [loadingFavorite, setloadingFavorite] = useState(false); //spiner de añadiendo a favorito
   const { auth, logout } = useAuth();
 
+  // fn agrega un juego a favoritos del usuario
   const addFavorite = async () => {
     if (auth) {
       setloadingFavorite(true);
@@ -35,17 +42,23 @@ function Info({ game }) {
     }
   };
 
-  const deleteFavorite = () => {
-    console.log("Eliminando");
+  // fn quita un juego de favoritos del usuario
+  const deleteFavorite = async () => {
+    if (auth) {
+      setloadingFavorite(true);
+      await deleteFavoriteApi(auth.idUser, game.id, logout);
+      setReloadFavorite(true);
+    }
   };
 
+  // hook se encarga de refrescar la opción de favoritos
   useEffect(() => {
     (async () => {
       const response = await isFavoriteApi(auth.idUser, game.id, logout);
       if (size(response) > 0) setIsFavorite(true);
       else setIsFavorite(false);
     })();
-    setReloadFavorite(false);
+    setReloadFavorite(false); //vuelve al estado inicial
     setloadingFavorite(false);
   }, [game, reloadFavorite]); //cada vez que el juego cambie
 
