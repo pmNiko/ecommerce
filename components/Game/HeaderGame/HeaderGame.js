@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { size } from "lodash";
+import classNames from "classnames";
 import { Grid, Image, Icon, Button } from "semantic-ui-react";
+import { isFavoriteApi, addFavoriteApi } from "../../../api/favorite";
+import useAuth from "../../../hooks/useAuth";
 
 export default function HeaderGame({ game }) {
   const { poster, title } = game;
@@ -19,11 +22,44 @@ export default function HeaderGame({ game }) {
 
 function Info({ game }) {
   const { title, summary, price, discount } = game;
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [reloadFavorite, setReloadFavorite] = useState(false);
+  const [loadingFavorite, setloadingFavorite] = useState(false);
+  const { auth, logout } = useAuth();
+
+  const addFavorite = async () => {
+    if (auth) {
+      setloadingFavorite(true);
+      await addFavoriteApi(auth.idUser, game.id, logout);
+      setReloadFavorite(true);
+    }
+  };
+
+  const deleteFavorite = () => {
+    console.log("Eliminando");
+  };
+
+  useEffect(() => {
+    (async () => {
+      const response = await isFavoriteApi(auth.idUser, game.id, logout);
+      if (size(response) > 0) setIsFavorite(true);
+      else setIsFavorite(false);
+    })();
+    setReloadFavorite(false);
+    setloadingFavorite(false);
+  }, [game, reloadFavorite]); //cada vez que el juego cambie
+
   return (
     <>
       <div className="header-game__title">
         {title}
-        <Icon name="heart outline" link />
+        <Icon
+          name={isFavorite ? "heart" : "heart outline"} //relleno o vacio según condición
+          className={classNames({ like: isFavorite })} //lo colorea si esta como favorito
+          link
+          onClick={isFavorite ? deleteFavorite : addFavorite}
+          loading={loadingFavorite}
+        />
       </div>
       <div className="header-game__delivery">Entrega en 24/48 hs</div>
       <div
@@ -36,7 +72,7 @@ function Info({ game }) {
           <p>Precio de venta al publico ${price}</p>
           <div className="header-game__buy-price-actions">
             <p>-{discount}%</p>
-            <p>${price - Math.ceil(price * discount) / 100}</p>
+            <p>${price - Math.floor(price * discount) / 100}</p>
           </div>
         </div>
         <Button className="header-game__buy-btn">Comprar</Button>
