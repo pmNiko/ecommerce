@@ -7,6 +7,7 @@ export function getProductsCart() {
   const cart = localStorage.getItem(CART);
 
   if (!cart) {
+    console.log("null");
     return null;
   } else {
     // convertimos el string en un array de productos
@@ -33,5 +34,16 @@ export function addProductCart(product) {
       localStorage.setItem(CART, cart);
       toast.success("Producto añadido correctamente");
     }
+  }
+}
+
+// fn para devolver la cantidad de productos en el carrito
+export function countProductsCart() {
+  const cart = getProductsCart();
+
+  if (!cart) {
+    return 0;
+  } else {
+    return size(cart);
   }
 }

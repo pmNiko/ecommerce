@@ -5,7 +5,11 @@ import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
 import CartContext from "../context/CartContext";
 import { setToken, getToken, removeToken } from "../api/token";
-import { getProductsCart, addProductCart } from "../api/cart";
+import {
+  getProductsCart,
+  addProductCart,
+  countProductsCart,
+} from "../api/cart";
 import "../scss/global.scss";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +20,8 @@ export default function MyApp({ Component, pageProps }) {
   // state para guardar los datos del user
   const [auth, setAuth] = useState(undefined);
   const [reloadUser, setReloadUser] = useState(false);
+  const [totalProductsCart, setTotalProductsCart] = useState(0);
+  const [reloadCart, setReloadCart] = useState(false);
   const router = useRouter();
 
   // se recargaran los datos del usuario mediante el state
@@ -50,6 +56,12 @@ export default function MyApp({ Component, pageProps }) {
     }
   };
 
+  // hook para contar los productos del carrito apenas carga la app
+  useEffect(() => {
+    setTotalProductsCart(countProductsCart);
+    setReloadCart(false);
+  }, [reloadCart, auth]);
+
   // constante para guardar mediante el hook las fn de authenticación
   const authData = useMemo(
     () => ({
@@ -66,6 +78,7 @@ export default function MyApp({ Component, pageProps }) {
     const token = getToken();
     if (token) {
       addProductCart(product);
+      setReloadCart(true);
     } else {
       toast.warning("Para comprar debes iniciar session.");
     }
@@ -74,13 +87,13 @@ export default function MyApp({ Component, pageProps }) {
   // value del provider CartContext
   const cartData = useMemo(
     () => ({
-      productsCart: 0,
+      productsCart: totalProductsCart,
       addProductCart: (product) => addProduct(product),
       getProductsCart: getProductsCart,
       removeProductCart: () => null,
       removeAllProductsCart: () => null,
     }),
-    []
+    [totalProductsCart]
   );
 
   // comprobación de datos

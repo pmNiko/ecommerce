@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Container, Menu, Grid, Icon } from "semantic-ui-react";
+import { Container, Menu, Grid, Icon, Label } from "semantic-ui-react";
 import Link from "next/link";
 import { map } from "lodash";
 import BasicModal from "../../Modal/BasicModal";
 import Auth from "../../Auth";
 import useAuth from "../../../hooks/useAuth";
+import useCart from "../../../hooks/useCart";
 import { getMeApi } from "../../../api/user";
 import { getPlatformsApi } from "../../../api/platform";
 
@@ -44,7 +45,7 @@ export default function MenuWeb() {
           </Grid.Column>
           <Grid.Column className="menu__right" width={10}>
             {user !== undefined && (
-              <MenuOption
+              <MenuOptions
                 onShowModal={onShowModal}
                 user={user}
                 logout={logout}
@@ -79,7 +80,8 @@ function MenuPlatforms({ platforms }) {
   );
 }
 
-function MenuOption({ onShowModal, user, logout }) {
+function MenuOptions({ onShowModal, user, logout }) {
+  const { productsCart } = useCart();
   return (
     <Menu>
       {user ? (
@@ -105,6 +107,11 @@ function MenuOption({ onShowModal, user, logout }) {
           <Link href="/cart">
             <Menu.Item as="a" className="m-0">
               <Icon name="cart" />
+              {productsCart > 0 && (
+                <Label color="red" floating circular>
+                  {productsCart}
+                </Label>
+              )}
             </Menu.Item>
           </Link>
           <Menu.Item className="m-0" onClick={logout}>
