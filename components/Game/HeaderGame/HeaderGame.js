@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { size } from "lodash";
 import classNames from "classnames";
 import { Grid, Image, Icon, Button } from "semantic-ui-react";
+import useAuth from "../../../hooks/useAuth";
+import useCart from "../../../hooks/useCart";
 import {
   isFavoriteApi,
   addFavoriteApi,
   deleteFavoriteApi,
 } from "../../../api/favorite";
-import useAuth from "../../../hooks/useAuth";
 
 // render del componente header del game
 export default function HeaderGame({ game }) {
@@ -27,11 +28,12 @@ export default function HeaderGame({ game }) {
 
 // render de la info del juego
 function Info({ game }) {
-  const { title, summary, price, discount } = game;
+  const { title, summary, price, discount, url } = game;
   const [isFavorite, setIsFavorite] = useState(false); //validación de juego favorito
   const [reloadFavorite, setReloadFavorite] = useState(false); //lanza la recarga mediante useEffect
   const [loadingFavorite, setloadingFavorite] = useState(false); //spiner de añadiendo a favorito
   const { auth, logout } = useAuth();
+  const { addProductCart } = useCart();
 
   // fn agrega un juego a favoritos del usuario
   const addFavorite = async () => {
@@ -88,7 +90,12 @@ function Info({ game }) {
             <p>${(price - Math.floor(price * discount) / 100).toFixed(2)}</p>
           </div>
         </div>
-        <Button className="header-game__buy-btn">Comprar</Button>
+        <Button
+          className="header-game__buy-btn"
+          onClick={() => addProductCart(url)}
+        >
+          Comprar
+        </Button>
       </div>
     </>
   );
