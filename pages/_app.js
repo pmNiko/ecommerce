@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
+import CartContext from "../context/CartContext";
 import jwtDecode from "jwt-decode";
 import { setToken, getToken, removeToken } from "../api/token";
 import { useRouter } from "next/router";
@@ -59,24 +60,38 @@ export default function MyApp({ Component, pageProps }) {
     [auth] //se actualizara cuando cambie el state
   );
 
+  // value del provider CartContext
+  const cartData = useMemo(
+    () => ({
+      productsCart: 0,
+      addProductCart: () => null,
+      getProductsCart: () => null,
+      removeProductCart: () => null,
+      removeAllProductsCart: () => null,
+    }),
+    []
+  );
+
   // comprobación de datos
   if (auth === undefined) return null;
 
   return (
     // Pasa al Provider los datos en memoria authData
     <AuthContext.Provider value={authData}>
-      <Component {...pageProps} />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover
-      />
+      <CartContext.Provider value={cartData}>
+        <Component {...pageProps} />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+        />
+      </CartContext.Provider>
     </AuthContext.Provider>
   );
 }
