@@ -9,6 +9,7 @@ import {
   getProductsCart,
   addProductCart,
   countProductsCart,
+  removeProductCart,
 } from "../api/cart";
 import "../scss/global.scss";
 import "semantic-ui-css/semantic.min.css";
@@ -73,7 +74,7 @@ export default function MyApp({ Component, pageProps }) {
     [auth] //se actualizara cuando cambie el state
   );
 
-  // fn para cartData
+  // fn para agregar productos a cartData
   const addProduct = (product) => {
     const token = getToken();
     if (token) {
@@ -84,13 +85,19 @@ export default function MyApp({ Component, pageProps }) {
     }
   };
 
+  //fn para quitar productos del cartData
+  const removeProduct = (product) => {
+    removeProductCart(product);
+    setReloadCart(true);
+  };
+
   // value del provider CartContext
   const cartData = useMemo(
     () => ({
       productsCart: totalProductsCart,
       addProductCart: (product) => addProduct(product),
       getProductsCart: getProductsCart,
-      removeProductCart: () => null,
+      removeProductCart: (product) => removeProduct(product),
       removeAllProductsCart: () => null,
     }),
     [totalProductsCart]

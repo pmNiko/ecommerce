@@ -3,7 +3,25 @@ import { Table, Image, Icon } from "semantic-ui-react";
 import { forEach, map } from "lodash";
 import useCart from "../../../hooks/useCart";
 
-export default function SummaryCart({ products }) {
+export default function SummaryCart({ products, reloadCart, setReloadCart }) {
+  const [totalPrice, setTotalPrice] = useState(0); //contiene el precio total
+  const { removeProductCart } = useCart();
+
+  // calcula el precio total
+  useEffect(() => {
+    let price = 0;
+    forEach(products, (product) => {
+      price += product.price;
+    });
+    setTotalPrice(price);
+  }, [reloadCart, products]);
+
+  //fn para quitar productos del cartData
+  const removeProduct = (product) => {
+    removeProductCart(product);
+    setReloadCart(true);
+  };
+
   return (
     <div className="summary-cart">
       <div className="title">Resumen de carrito</div>
@@ -25,7 +43,7 @@ export default function SummaryCart({ products }) {
                   <Icon
                     name="close"
                     link
-                    onClick={() => console.log("Borrar Producto")}
+                    onClick={() => removeProduct(product.url)}
                   />
                   <Image src={product.poster.url} alt={product.title} />
                   {product.title}
@@ -35,6 +53,13 @@ export default function SummaryCart({ products }) {
                 <Table.Cell> $ {product.price} </Table.Cell>
               </Table.Row>
             ))}
+            <Table.Row className="summary-cart__resume">
+              <Table.Cell className="clear" />
+              <Table.Cell colSpan="2">Total: </Table.Cell>
+              <Table.Cell className="total-price">
+                $ {totalPrice.toFixed(2)}
+              </Table.Cell>
+            </Table.Row>
           </Table.Body>
         </Table>
       </div>

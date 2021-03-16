@@ -47,3 +47,18 @@ export function countProductsCart() {
     return size(cart);
   }
 }
+
+// fn quitar productos del carrito
+export function removeProductCart(product) {
+  const cart = getProductsCart(); //recupero los items
+
+  remove(cart, (item) => {
+    return item === product; //quito el product del array
+  });
+
+  if (size(cart) > 0) {
+    localStorage.setItem(CART, cart); //seteo el carrito
+  } else {
+    localStorage.removeItem(CART); //limpiamos el localStorage
+  }
+}
