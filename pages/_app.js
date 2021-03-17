@@ -10,6 +10,7 @@ import {
   addProductCart,
   countProductsCart,
   removeProductCart,
+  removeAllProductsCart,
 } from "../api/cart";
 import "../scss/global.scss";
 import "semantic-ui-css/semantic.min.css";
@@ -98,7 +99,7 @@ export default function MyApp({ Component, pageProps }) {
       addProductCart: (product) => addProduct(product),
       getProductsCart: getProductsCart,
       removeProductCart: (product) => removeProduct(product),
-      removeAllProductsCart: () => null,
+      removeAllProductsCart: removeAllProductsCart,
     }),
     [totalProductsCart]
   );
