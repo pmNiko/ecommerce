@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { map, size } from "lodash";
 import Link from "next/link";
 import classNames from "classnames";
 import { getAddressApi } from "../../../api/address";
 import useAuth from "../../../hooks/useAuth";
 
-export default function AddressShipping() {
+export default function AddressShipping({ setAddress }) {
   const [addresses, setAddresses] = useState(null);
+  const [addressActive, setAddressActive] = useState(null);
   const { auth, logout } = useAuth(); //context
 
   useEffect(() => {
@@ -32,7 +33,12 @@ export default function AddressShipping() {
           <Grid>
             {map(addresses, (address) => (
               <Grid.Column key={address.id} mobile={16} tablet={8} computer={4}>
-                <Address address={address} />
+                <Address
+                  address={address}
+                  addressActive={addressActive}
+                  setAddressActive={setAddressActive}
+                  setAddress={setAddress}
+                />
               </Grid.Column>
             ))}
           </Grid>
@@ -42,9 +48,21 @@ export default function AddressShipping() {
   );
 }
 
-function Address({ address }) {
+function Address({ address, addressActive, setAddressActive, setAddress }) {
+  // fn para cambiar la dirección de envio
+  const changeAddress = () => {
+    setAddressActive(address._id); //id de la direccón activa
+    setAddress(address); //todos los datos de la dirección
+  };
+
   return (
-    <div className="address">
+    <div
+      // usamos classNames para añadir la clase active segun condición
+      className={classNames("address", {
+        active: addressActive === address._id,
+      })}
+      onClick={changeAddress}
+    >
       <p>{address.title}</p>
       <p>{address.name}</p>
       <p>{address.address}</p>
