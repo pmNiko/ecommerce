@@ -1,5 +1,6 @@
 // url base de la API
-export const BASE_PATH = "http://localhost:1337";
+// export const BASE_PATH = "http://localhost:1337";
+export const BASE_PATH = "https://ecommerce-gamming-strapi.herokuapp.com";
 // CONSTANTE para manejar el token
 export const TOKEN = "token";
 // constante para manejar el carrito
