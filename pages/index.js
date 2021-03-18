@@ -4,6 +4,7 @@ import { size, map } from "lodash";
 import BasicLayout from "../layouts/BasicLayout";
 import { getLastGamesApi } from "../api/game";
 import ListGames from "../components/ListGames";
+import Seo from "../components/Seo";
 
 export default function Home() {
   const [games, setGames] = useState(null); //state de juegos
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <BasicLayout className="home">
+      <Seo />
       {/* spinner activo mientras se realiza la petición */}
       {!games && <Loader active>Cargando juegos</Loader>}
       {/* Si al teminar la petición no existen juegos  */}

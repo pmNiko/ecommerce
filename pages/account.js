@@ -10,6 +10,7 @@ import ChangePasswordForm from "../components/Account/ChangePasswordForm";
 import BasicModal from "../components/Modal/BasicModal";
 import AddressForm from "../components/Account/AddressForm";
 import ListAddress from "../components/Account/ListAddress";
+import Seo from "../components/Seo";
 
 // Pagina de perfil de user
 export default function Account() {
@@ -37,6 +38,7 @@ export default function Account() {
 
   return (
     <BasicLayout className="account">
+      <Seo title={`Perfil de ${user.name}`} />
       <Configuration
         user={user}
         logout={logout}

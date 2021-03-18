@@ -6,6 +6,7 @@ import BasicLayout from "../../layouts/BasicLayout";
 import { getGamesPlatformApi, getTotalGamesPlatformApi } from "../../api/game";
 import ListGames from "../../components/ListGames";
 import Pagination from "../../components/Pagination";
+import Seo from "../../components/Seo";
 
 // limite por pagina
 const limitPerPage = 5;
@@ -49,6 +50,7 @@ export default function Platform() {
 
   return (
     <BasicLayout className="platform">
+      <Seo title={query.platform} />
       {!games && <Loader active>Cargando juegos</Loader>}
       {games && size(games) === 0 && (
         <div>
